@@ -6,12 +6,10 @@
 
     {% block content %}
         <h1>Pokemon Page</h1>
-        <form class="px-3" action="/poke" method="POST">
-            <div class="form-group">
-                <label for="new_pokemon">Enter Pokemon: </label>
-                <input type="text" class="form-control" id="new_pokemon" name="new_pokemon">
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Search Results!</button>
+        <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.pokemon }}
+                {{ form.submit_btn }}
         </form>
         {% if pokemon_data %}
             <table class="table table-bordered">
