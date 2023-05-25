@@ -12,29 +12,20 @@
                 {{ form.submit_btn }}
         </form>
         {% if pokemon_data %}
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Pokemon Name</th>
-                        <th scope="col">Hp Base Stat</th>
-                        <th scope="col">Attack Base Stat</th>
-                        <th scope="col">Defense Base Stat</th>
-                        <th scope="col">Ability</th>
-                        <th scope="col">Front Shiny</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for pokemon in pokemon_data %}
-                        <tr>
-                            <th>{{pokemon.name}}</th>
-                            <td>{{pokemon.hp}}</td>
-                            <td>{{pokemon.attack}}</td>
-                            <td>{{pokemon.defense}}</td>
-                            <td>{{pokemon.ability}}</td>
-                            <td>{{pokemon.image}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% for pokemon in pokemon_data %}
+            <div class="card mx-auto", id="card" style="width: 18rem;">
+                <img src="{{pokemon.image}}" class="card-img-top">
+                <div class="card-body mx-auto">
+                    <h2 class="card-title mx-auto fw-bold">{{pokemon.name.capitalize()}}</h2>
+                    <ul class="card-text">
+                    <li>HP Base Stat: {{pokemon.hp}}</li>
+                    <li>Attack Base Stat: {{pokemon.attack}}</li>
+                    <li>Defense Base Stat: {{pokemon.defense}}</li>
+                    <li>Move: {{pokemon.move.capitalize()}}</li>
+                    <li>Ability: {{pokemon.ability.capitalize()}}</li>
+                    </ul>
+                </div>
+              </div>
+            {% endfor %}
         {% endif %}
     {% endblock %}

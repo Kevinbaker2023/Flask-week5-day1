@@ -1,15 +1,47 @@
 from flask import request, render_template
 import requests
-from app.forms import Pokemon_Name
+from app.forms import PokemonName, LoginForm, SignupForm
 from app import app
 
 @app.route("/")
+@app.route('/home')
 def greeting():
     return 'Welcome to Pokemon!'
 
+REGISTERED_USERS = {}
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        email = form.email.data.lower()
+        password = form.password.data
+        if email in REGISTERED_USERS and password == REGISTERED_USERS[email]['password']:
+            return f"Welcome {REGISTERED_USERS[email]['name']}!"
+        else:
+            return 'Email or password was incorrect, please try again.'
+    else:
+        return render_template('login.html', form=form)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        name = form.first_name.data + ' ' + form.last_name.data
+        email = form.email.data.lower()
+        password = form.password.data
+        REGISTERED_USERS[email] = {
+            'name': name,
+            'password': password
+        }
+        print(REGISTERED_USERS)
+        return 'Please proceed to login'
+    else:
+        return render_template('signup.html', form=form)
+
 @app.route('/poke', methods=['GET', 'POST'])
 def poke():
-    form = Pokemon_Name()
+    form = PokemonName()
     if request.method == 'POST' and form.validate_on_submit():
         pokemon = form.pokemon.data.lower()
         print(pokemon)
@@ -38,7 +70,8 @@ def get_pokemon_data(data):
             'image': f"{new_pokemon_data['sprites']['front_shiny']}",
             'hp': f"{new_pokemon_data['stats'][0]['base_stat']}",
             'attack': f"{new_pokemon_data['stats'][1]['base_stat']}",
-            'defense': f"{new_pokemon_data['stats'][2]['base_stat']}"
+            'defense': f"{new_pokemon_data['stats'][2]['base_stat']}",
+            'move': f"{new_pokemon_data['moves'][16]['move']['name']}"
         }
         if len(pokemon_list) <= 0:
             pokemon_list.append(pokemon_dict)
