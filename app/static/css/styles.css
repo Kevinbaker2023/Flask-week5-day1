@@ -7,4 +7,14 @@
 
 #card{
     border-radius: 25px;
+    margin-top: 2rem;
+}
+
+#home-page{
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+
+nav {
+    margin-bottom: 2rem;
 }

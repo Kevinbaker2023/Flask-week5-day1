@@ -1,14 +1,15 @@
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for, flash
 import requests
 from app.forms import PokemonName, LoginForm, SignupForm
-from app import app
+from app import app, db
+from app.models import User
+from werkzeug.security import check_password_hash
+from flask_login import current_user, login_user, logout_user, login_required
 
 @app.route("/")
 @app.route('/home')
 def greeting():
-    return 'Welcome to Pokemon!'
-
-REGISTERED_USERS = {}
+    return render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -16,10 +17,14 @@ def login():
     if request.method == 'POST' and form.validate_on_submit():
         email = form.email.data.lower()
         password = form.password.data
-        if email in REGISTERED_USERS and password == REGISTERED_USERS[email]['password']:
-            return f"Welcome {REGISTERED_USERS[email]['name']}!"
+        queried_user = User.query.filter(User.email == email).first()
+        if queried_user and check_password_hash(queried_user.password, password):
+            login_user(queried_user)
+            flash(f"Welcome {queried_user.first_name}. You successfully logged in!", 'secondary')
+            return redirect(url_for('poke'))
         else:
-            return 'Email or password was incorrect, please try again.'
+            error = 'Email or password was incorrect, please try again!'
+            return render_template('login.html' , form=form, error=error)
     else:
         return render_template('login.html', form=form)
 
@@ -27,19 +32,33 @@ def login():
 def signup():
     form = SignupForm()
     if request.method == 'POST' and form.validate_on_submit():
-        name = form.first_name.data + ' ' + form.last_name.data
-        email = form.email.data.lower()
-        password = form.password.data
-        REGISTERED_USERS[email] = {
-            'name': name,
-            'password': password
+        user_data = {
+            'first_name': form.first_name.data,
+            'last_name': form.last_name.data,
+            'email': form.email.data.lower(),
+            'password': form.password.data
         }
-        print(REGISTERED_USERS)
-        return 'Please proceed to login'
+
+        new_user = User()
+        new_user.from_dict(user_data)
+        db.session.add(new_user)
+        db.session.commit()
+        
+        flash(f"Thank you for signing up {user_data['first_name']}, please login!", 'secondary')
+        return redirect(url_for('login'))
     else:
         return render_template('signup.html', form=form)
+    
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash(f"You have successfully logged out", 'danger')
+    return redirect(url_for('login'))
+
+    
 
 @app.route('/poke', methods=['GET', 'POST'])
+@login_required
 def poke():
     form = PokemonName()
     if request.method == 'POST' and form.validate_on_submit():
@@ -71,7 +90,8 @@ def get_pokemon_data(data):
             'hp': f"{new_pokemon_data['stats'][0]['base_stat']}",
             'attack': f"{new_pokemon_data['stats'][1]['base_stat']}",
             'defense': f"{new_pokemon_data['stats'][2]['base_stat']}",
-            'move': f"{new_pokemon_data['moves'][16]['move']['name']}"
+            'move': f"{new_pokemon_data['moves'][16]['move']['name']}",
+            'type1': f"{new_pokemon_data['types'][0]['type']['name']}",
         }
         if len(pokemon_list) <= 0:
             pokemon_list.append(pokemon_dict)
