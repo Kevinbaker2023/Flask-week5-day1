@@ -20,7 +20,7 @@ def login():
         queried_user = User.query.filter(User.email == email).first()
         if queried_user and check_password_hash(queried_user.password, password):
             login_user(queried_user)
-            flash(f"Welcome {queried_user.first_name}. You successfully logged in!", 'secondary')
+            flash(f"Welcome {queried_user.first_name}. You successfully logged in!", 'primary')
             return redirect(url_for('poke'))
         else:
             error = 'Email or password was incorrect, please try again!'
@@ -44,7 +44,7 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         
-        flash(f"Thank you for signing up {user_data['first_name']}, please login!", 'secondary')
+        flash(f"Thank you for signing up {user_data['first_name']}, please login!", 'primary')
         return redirect(url_for('login'))
     else:
         return render_template('signup.html', form=form)
