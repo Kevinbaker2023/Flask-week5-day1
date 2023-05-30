@@ -19,7 +19,7 @@
             <ul class="navbar-nav">
             {% if current_user.is_authenticated %}
             <li>
-              <a class="nav-link text-white" href="">{{ current_user.first_name}} {{ current_user.last_name }}</a>
+              <a class="nav-link text-white" href="">Welcome, {{ current_user.first_name}} {{ current_user.last_name }}</a>
             </li>
               <li class="nav-item">
                 <a class="nav-link active text-white" href="{{ url_for('greeting') }}">Home</a>
