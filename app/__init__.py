@@ -8,18 +8,18 @@ login_manager = LoginManager()
 db = SQLAlchemy()
 migrate = Migrate()
 
+login_manager.login_view = 'auth.login'
+login_manager.login_message = 'Please sign up or login to access this page'
+login_manager.login_message_category = 'info'
 
-def create_factory():
+
+def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
     login_manager.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
-
-    login_manager.login_view = 'auth.login'
-    login_manager.login_message = 'Please sign up or login to access this page'
-    login_manager.login_message_category = 'info'
 
     from app.blueprints.auth import auth
     from app.blueprints.pokemon import pokemon
@@ -29,4 +29,4 @@ def create_factory():
 
     return app
 
-from app import models
+# from app import models
