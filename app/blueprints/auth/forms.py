@@ -2,10 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, EmailField, PasswordField
 from wtforms.validators import DataRequired, EqualTo
 
-class PokemonName(FlaskForm):
-    pokemon = StringField('Pokemon: ', validators=[DataRequired()])
-    submit_btn = SubmitField('Enter')
-
 class LoginForm(FlaskForm):
     email = EmailField('Email: ', validators=[DataRequired()])
     password = PasswordField('Password: ', validators=[DataRequired()])
