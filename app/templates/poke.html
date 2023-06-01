@@ -28,9 +28,9 @@
                     <li>Ability: {{ pokemon.ability.capitalize() }}</li>
                     <li>Type: {{ pokemon.type1.capitalize() }}</li>
                     </ul>
+                    {{ form.catch_btn(class="btn btn-info rounded d-block mx-auto")  }}
                 </div>
               </div>
             {% endfor %}
-            {{ form1.submit_btn(class="rounded d-block mx-auto", id='enter-btn')  }}
         {% endif %}
     {% endblock %}

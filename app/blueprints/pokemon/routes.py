@@ -1,7 +1,9 @@
-from flask import request, render_template
+from flask import request, render_template, flash
 import requests
-from app.blueprints.pokemon.forms import PokemonName, CatchPokemon
-from flask_login import login_required
+from app import db
+from app.models import Pokemon
+from app.blueprints.pokemon.forms import PokemonName
+from flask_login import login_required, current_user
 from . import pokemon
 
 @pokemon.route("/")
@@ -13,20 +15,40 @@ def greeting():
 @login_required
 def poke():
     form = PokemonName()
-    form1 = CatchPokemon()
     if request.method == 'POST' and form.validate_on_submit():
-        pokemon = form.pokemon.data.lower()
-        print(pokemon)
-        url = f'https://pokeapi.co/api/v2/pokemon/{pokemon}'
-        response = requests.get(url)
-        if response.ok:
+        if form.submit_btn.data:
+            pokemon = form.pokemon.data.lower()
+            url = f'https://pokeapi.co/api/v2/pokemon/{pokemon}'
+            response = requests.get(url)
+            if response.ok:
                 try:
                     new_pokemon_data = response.json()
                     pokemon_data = get_pokemon_data(new_pokemon_data)
-                    return render_template('poke.html',pokemon_data=pokemon_data, form=form, form1=form1)
+                    return render_template('poke.html',pokemon_data=pokemon_data, form=form)
                 except IndexError:
                      return 'That pokemon does not exist!'
-    return render_template('poke.html', form=form, form1=form1)
+    elif form.catch_btn.data:
+            poke_data = {
+                'pokemon_name' : form.pokemon_name.data,
+                'ability' : form.ability.data,
+                'experience' : form.experience.data,
+                'hp' : form.hp.data,
+                'attack' : form.attack.data,
+                'defense' : form.defense.data,
+                'move' : form.move.data,
+                'pokemon_type' : form.pokemon_type.data,
+                'user_id' : current_user.id
+            }
+            
+            new_post = Pokemon()
+            new_post.from_dict(poke_data)
+            db.session.add(new_post)
+            db.session.commit()
+
+            flash(f'You caught {poke_data["pokemon_name"]}!')
+            return render_template('poke.html', form=form)
+    else:
+        return render_template('poke.html', form=form)
 
 def get_pokemon_data(data):
     pokemon_list = []

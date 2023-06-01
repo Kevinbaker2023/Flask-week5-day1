@@ -4,7 +4,7 @@ from app import db
 from . import auth
 from app.models import User
 from werkzeug.security import check_password_hash
-from flask_login import current_user, login_user, logout_user
+from flask_login import login_user, logout_user
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():

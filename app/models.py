@@ -24,7 +24,6 @@ class User(UserMixin, db.Model):
 class Pokemon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pokemon_name = db.Column(db.String, nullable=False)
-    given_name = db.Column(db.String)
     ability = db.Column(db.String, nullable=False)
     experience = db.Column(db.Integer, nullable=False)
     hp = db.Column(db.Integer, nullable=False)
