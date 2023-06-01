@@ -20,13 +20,10 @@ def poke():
         url = f'https://pokeapi.co/api/v2/pokemon/{pokemon}'
         response = requests.get(url)
         if response.ok:
-            try:
-                new_pokemon_data = response.json()
-                pokemon_data = get_pokemon_data(new_pokemon_data)
-                return render_template('poke.html',pokemon_data=pokemon_data, form=form)
-            except IndexError:
-                return 'That pokemon does not exist!'
-        elif form.catch: 
+            new_pokemon_data = response.json()
+            pokemon_data = get_pokemon_data(new_pokemon_data)
+            return render_template('poke.html', pokemon_data=pokemon_data, form=form)
+    elif form.catch.data:
             poke_data = {
                 'pokemon_name': form.pokemon.data,
                 'user_id': current_user.id
