@@ -1,6 +1,6 @@
 from flask import request, render_template
 import requests
-from app.blueprints.pokemon.forms import PokemonName
+from app.blueprints.pokemon.forms import PokemonName, CatchPokemon
 from flask_login import login_required
 from . import pokemon
 
@@ -13,6 +13,7 @@ def greeting():
 @login_required
 def poke():
     form = PokemonName()
+    form1 = CatchPokemon()
     if request.method == 'POST' and form.validate_on_submit():
         pokemon = form.pokemon.data.lower()
         print(pokemon)
@@ -22,10 +23,10 @@ def poke():
                 try:
                     new_pokemon_data = response.json()
                     pokemon_data = get_pokemon_data(new_pokemon_data)
-                    return render_template('poke.html',pokemon_data=pokemon_data, form=form)
+                    return render_template('poke.html',pokemon_data=pokemon_data, form=form, form1=form1)
                 except IndexError:
                      return 'That pokemon does not exist!'
-    return render_template('poke.html', form=form)
+    return render_template('poke.html', form=form, form1=form1)
 
 def get_pokemon_data(data):
     pokemon_list = []

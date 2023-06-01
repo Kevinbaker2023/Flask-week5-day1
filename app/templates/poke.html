@@ -9,7 +9,9 @@
         <form action="" method="POST" class="mb-2 text-center">
                 {{ form.hidden_tag() }}
                 {{ form.pokemon(class="rounded", placeholder='Enter pokemon name!') }}
-                {{ form.submit_btn(class="rounded")  }}
+                <div>
+                    {{ form.submit_btn(class="rounded", id='enter-btn')  }}
+                </div>
         </form>
         {% if pokemon_data %}
             {% for pokemon in pokemon_data %}
@@ -29,5 +31,6 @@
                 </div>
               </div>
             {% endfor %}
+            {{ form1.submit_btn(class="rounded d-block mx-auto", id='enter-btn')  }}
         {% endif %}
     {% endblock %}
