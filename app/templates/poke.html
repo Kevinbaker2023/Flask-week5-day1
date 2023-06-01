@@ -10,7 +10,7 @@
                 {{ form.hidden_tag() }}
                 {{ form.pokemon(class="rounded", placeholder='Enter pokemon name!') }}
                 <div>
-                    {{ form.submit_btn(class="rounded", id='enter-btn')  }}
+                    {{ form.submit(class="rounded", id='enter-btn')  }}
                 </div>
         </form>
         {% if pokemon_data %}
@@ -28,7 +28,7 @@
                     <li>Ability: {{ pokemon.ability.capitalize() }}</li>
                     <li>Type: {{ pokemon.type1.capitalize() }}</li>
                     </ul>
-                    {{ form.catch_btn(class="btn btn-info rounded d-block mx-auto")  }}
+                    {{ form.catch(class="btn btn-info rounded d-block mx-auto")  }}
                 </div>
               </div>
             {% endfor %}

@@ -24,24 +24,10 @@ class User(UserMixin, db.Model):
 class Pokemon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pokemon_name = db.Column(db.String, nullable=False)
-    ability = db.Column(db.String, nullable=False)
-    experience = db.Column(db.Integer, nullable=False)
-    hp = db.Column(db.Integer, nullable=False)
-    attack = db.Column(db.Integer, nullable=False)
-    defense = db.Column(db.Integer, nullable=False)
-    move = db.Column(db.String, nullable=False)
-    pokemon_type = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def from_dict(self, poke_data):
         self.pokemon_name = poke_data['pokemon_name']
-        self.ability = poke_data['ability']
-        self.experience = poke_data['experience']
-        self.hp = poke_data['hp']
-        self.attack = poke_data['attack']
-        self.defense = poke_data['defense']
-        self.move = poke_data['move']
-        self.pokemon_type = poke_data['pokemon_type']
         self.user_id = poke_data['user_id']
 
 @login_manager.user_loader
