@@ -5,5 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1 id='home-page'>Welcome to this Pokemon website!</h1>
+    <h1 class="text-center" id='home-page'>This is your current team!</h1>
+    {% if team %}
+        {% for pokemon in team %}
+            <div class="card mx-auto", id="card" style="width: 20rem;">
+                <img src="{{pokemon.image}}" class="card-img-top">
+                <h2> {{pokemon.name}} </h2>
+                <a href="{{ url_for('pokemon.release', pokemon_id=pokemon.id) }}" class="btn btn-danger rounded d-block mx-auto">Release Pokemon</a>
+            </div>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

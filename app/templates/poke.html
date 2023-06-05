@@ -28,7 +28,7 @@
                     <li>Ability: {{ pokemon.ability.capitalize() }}</li>
                     <li>Type: {{ pokemon.type1.capitalize() }}</li>
                     </ul>
-                    {{ form.catch(class="btn btn-info rounded d-block mx-auto")  }}
+                    <a href="{{ url_for('pokemon.catch', pokemon_name=pokemon.name) }}" class="btn btn-info rounded d-block mx-auto">Catch Pokemon</a>
                 </div>
               </div>
             {% endfor %}

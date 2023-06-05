@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Users Page
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Choose another user to battle!</h1>
+    {% for user in users %}
+        {% if current_user.id != user.id %}
+            <div class="card mx-auto", id="card" style="width: 20rem;">
+                <img src="{{url_for('static', filename='images/avatar.jpeg')}}" class="card-img-top">
+                    <h4 class="text-center">{{user.first_name}}</h4>
+                    <a href="{{ url_for('pokemon.attack') }}" class="btn btn-primary rounded d-block mx-auto", id="attack-btn">Attack!</a>
+                </div>
+        {% endif %}
+    {%endfor %}
+{% endblock %}
