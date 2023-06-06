@@ -7,11 +7,9 @@ from flask_login import login_required, current_user
 from . import pokemon
 
 @pokemon.route("/")
-@pokemon.route('/home', methods=['GET'])
+@pokemon.route('/home')
 def greeting():
-    team = current_user.caught.all()
-    return render_template('home.html', team=team)
-
+    return render_template('home.html')
 @pokemon.route('/poke', methods=['GET', 'POST'])
 @login_required
 def poke():
@@ -25,6 +23,7 @@ def poke():
                 pokemon_data = get_pokemon_data(new_pokemon_data)
                 poke_data = {
                 'pokemon_name': form.pokemon.data,
+                'pokemon_url': new_pokemon_data['sprites']['front_shiny'],
                 'user_id': current_user.id
                 }
                 new_post = Pokemon()
@@ -60,7 +59,7 @@ def get_pokemon_data(data):
 @login_required
 def catch(pokemon_name):
     pokemon = Pokemon.query.filter_by(pokemon_name=pokemon_name).first()
-    if pokemon:
+    if pokemon and pokemon not in current_user.caught and len(current_user.caught.all()) <= 4:
         current_user.caught.append(pokemon)
         db.session.commit()
         flash(f"You successfully caught {pokemon_name.capitalize()}", 'success')
@@ -76,11 +75,18 @@ def release(pokemon_id):
     if pokemon:
         current_user.caught.remove(pokemon)
         db.session.commit()
-        flash(f'You have successfully released your pokemon!', 'success')
+        flash(f'You have successfully released {pokemon.pokemon_name.title()}!', 'success')
         return redirect(url_for('pokemon.greeting'))
     else:
         flash('You are not able to release this Pokemon!', 'warning')
         return redirect(url_for('pokemon.greeting'))
+    
+@pokemon.route('/poke_team')
+@login_required
+def poke_team():
+    team = current_user.caught.all()
+    return render_template('poke_team.html', team=team)
+
     
 @pokemon.route('/users')
 @login_required

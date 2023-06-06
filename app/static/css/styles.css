@@ -10,6 +10,15 @@
     margin-top: 2rem;
 }
 
+#user{
+    margin-top: .5rem
+}
+
+#team {
+    border-radius: 25px;
+    margin: 2rem;
+}
+
 #home-page{
     padding-top: 1rem;
     padding-left: 1rem;

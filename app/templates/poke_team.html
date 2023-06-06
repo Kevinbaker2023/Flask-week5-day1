@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Poketeam Page
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">This is your current team of Pokemon!</h1>
+    <div>
+        {% for pokemon in team %}
+        <div>
+            <div class="card mx-auto shadow-lg", id="team" style="width: 20rem;">
+                <img src="{{pokemon.pokemon_url}}" class="card-img-top">
+                <div class="card-body mx-auto">
+                    <h2 class="card-title text-center fw-bold">{{pokemon.pokemon_name.capitalize()}}</h2>
+                    <a href="{{ url_for('pokemon.release', pokemon_id=pokemon.id) }}" class="btn btn-danger rounded d-block mx-auto">Release Pokemon</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+{% endblock %}

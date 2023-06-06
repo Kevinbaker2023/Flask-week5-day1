@@ -15,7 +15,7 @@
         </form>
         {% if pokemon_data %}
             {% for pokemon in pokemon_data %}
-            <div class="card mx-auto", id="card" style="width: 20rem;">
+            <div class="card mx-auto shadow-lg", id="card" style="width: 20rem;">
                 <img src="{{pokemon.image}}" class="card-img-top">
                 <div class="card-body mx-auto">
                     <h2 class="card-title text-center fw-bold">{{pokemon.name.capitalize()}}</h2>

@@ -35,10 +35,12 @@ class User(UserMixin, db.Model):
 class Pokemon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pokemon_name = db.Column(db.String, nullable=False)
+    pokemon_url = db.Column(db.String, nullable=False)
 
 
     def from_dict(self, poke_data):
         self.pokemon_name = poke_data['pokemon_name']
+        self.pokemon_url = poke_data['pokemon_url']
 
 @login_manager.user_loader
 def load_user(user_id):
