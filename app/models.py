@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow())
     caught = db.relationship('Pokemon',
         secondary = user_pokemon,
-        backref = db.backref('user_pokemon', lazy='dynamic),
+        backref = db.backref('user_pokemon', lazy='dynamic'),
         lazy='dynamic'
     )
     
